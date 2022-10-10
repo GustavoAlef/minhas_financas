@@ -1,5 +1,30 @@
 <html>
   <script>
+
+    class Lancamento {
+
+      constructor(categoria, tipo, valor) {
+        if (tipo !== "receita" && tipo !== "despesa") {
+          throw new Error(
+            "lançamento inválido: Tipo deve ser receita ou despesa"
+          );
+        }
+
+        if (valor <= 0) {
+          throw new Error("lançamento inválido: Valor deve ser maior que zero");
+        }
+
+        if (categoria === "") {
+          throw new Error("lançamento inválido: A Categoria é obrigatória");
+        }
+
+        this.categoria = categoria;
+        this.tipo = tipo;
+        this.valor = valor;
+      }
+
+    }
+
     function arredondar(valor) {
       return Math.round(valor * 100) / 100;
     }
@@ -14,86 +39,102 @@
       return rendimentos;
     }
 
+    function distribuirDespesas(lancamentos, total) {
+      distribuicaoDeDespesas = []
+      for (lancamento of lancamentos) {
+        if (lancamento.tipo === "despesa") {
+          percentual = arredondar((lancamento.valor/total) * 100)
+          distribuicaoDeDespesas.push({ categoria: lancamento.categoria, percentual})
+          console.log(lancamento.categoria, percentual)
+        }
+      }
+      return distribuicaoDeDespesas
+    }
+
     function calcularSaldo(mes, saldoInicial, lancamentos) {
       console.log(mes);
 
-      saldo = saldoInicial;
+      totalizadorDoMes = { saldo: 0, saldoInicial, juros: 0, rendimentos: 0, receitas: 0, despesas: 0, distribuicaoDeDespesas: [] }
+
+      totalizadorDoMes.saldo = saldoInicial;
 
       for (lancamento of lancamentos) {
+        if (lancamento.tipo === "receita") {
+          totalizadorDoMes.saldo += lancamento.valor;
+          totalizadorDoMes.receitas += lancamento.valor
 
-        if(lancamento.tipo === "receita") {
-          saldo += lancamento.valor;
-         }
-        if(lancamento.tipo === "despesa") {
-          saldo -= lancamento.valor;
-         }
-
+        }
+        if (lancamento.tipo === "despesa") {
+          totalizadorDoMes.saldo -= lancamento.valor;
+          totalizadorDoMes.despesas += lancamento.valor
+        }
       }
 
-      estaNegativo = saldo < 0;
+      totalizadorDoMes.distribuicaoDeDespesas = distribuirDespesas(lancamentos, totalizadorDoMes.despesas)
+
+      estaNegativo = totalizadorDoMes.saldo < 0;
       if (estaNegativo) {
-        juros = calcularJuros(saldo);
-        saldo = arredondar(saldo + juros);
+        totalizadorDoMes.juros = calcularJuros(totalizadorDoMes.saldo);
+        totalizadorDoMes.saldo = arredondar(totalizadorDoMes.saldo + totalizadorDoMes.juros);
       } else {
-        rendimentos = calcularRendimentos(saldo);
-        saldo = arredondar(saldo + rendimentos);
+        totalizadorDoMes.rendimentos = calcularRendimentos(totalizadorDoMes.saldo);
+        totalizadorDoMes.saldo = arredondar(totalizadorDoMes.saldo + totalizadorDoMes.rendimentos);
       }
 
-      return saldo;
+      return totalizadorDoMes;
     }
 
     // janeiro
     saldoInicial = 0;
 
     lancamentosJaneiro = [
-      {categoria: "Salario", tipo: "receita", valor: 3000}, 
-      {categoria: "Aluguel", tipo: "despesa", valor: 1000}, 
-      {categoria: "Conta de luz", tipo: "despesa", valor: 200}, 
-      {categoria: "Conta de agua", tipo: "despesa", valor: 100}, 
-      {categoria: "Internet", tipo: "despesa", valor: 100}, 
-      {categoria: "Transporte", tipo: "despesa", valor: 300}, 
-      {categoria: "Lazer", tipo: "despesa", valor: 300}, 
-      {categoria: "Alimentacao", tipo: "despesa", valor: 500}, 
-      {categoria: "Condominio", tipo: "despesa", valor: 300},
-      {categoria: "Farmacia", tipo: "despesa", valor: 100},
+      new Lancamento("Salario", "receita", 3000),
+      new Lancamento("Aluguel", "despesa", 1000),
+      new Lancamento("Conta de Luz", "despesa", 200),
+      new Lancamento("Conta de Água", "despesa", 100),
+      new Lancamento("Internet", "despesa", 100),
+      new Lancamento("Transporte", "despesa", 300),
+      new Lancamento("Lazer", "despesa", 300),
+      new Lancamento("Alimentacao", "despesa", 500),
+      new Lancamento("Condominio", "despesa", 300)
     ];
 
-    saldo1 = calcularSaldo("janeiro", saldoInicial, lancamentosJaneiro);
-    console.log(saldo1);
+    totalizadorDoMes1 = calcularSaldo("Janeiro", saldoInicial, lancamentosJaneiro);
+    console.log(totalizadorDoMes1);
 
     // fevereiro
     lancamentosFavereiro = [
-      { categoria: "Salário", tipo: "receita", valor: 3000 },
-			{ categoria: "Aluguel", tipo: "despesa", valor: 1200 },
-			{ categoria: "Conta de Luz", tipo: "despesa", valor: 250 },
-			{ categoria: "Conta de Água", tipo: "despesa", valor: 100 },
-			{ categoria: "Internet", tipo: "despesa", valor: 100 },
-			{ categoria: "Transporte", tipo: "despesa", valor: 500 },
-			{ categoria: "Alimentação", tipo: "despesa", valor: 1000 },
-			{ categoria: "Condomínio", tipo: "despesa", valor: 400 }
+      new Lancamento("Salario", "receita", 3000),
+      new Lancamento("Aluguel", "despesa", 1200),
+      new Lancamento("Conta de Luz", "despesa", 250),
+      new Lancamento("Conta de Água", "despesa", 100),
+      new Lancamento("Internet", "despesa", 100),
+      new Lancamento("Transporte", "despesa", 500),
+      new Lancamento("Alimentação", "despesa", 1000),
+      new Lancamento("Condomínio", "despesa", 400),
     ];
 
-    saldo2 = calcularSaldo("fevereiro", saldo1, lancamentosFavereiro);
-    console.log(saldo2);
+    totalizadorDoMes2 = calcularSaldo("Fevereiro", totalizadorDoMes1.saldo, lancamentosFavereiro);
+    console.log(totalizadorDoMes2);
 
     // marco
     lancamentosMarco = [
-    { categoria: "Salário", tipo: "receita", valor: 4000 }, 
-			{ categoria: "Aluguel", tipo: "despesa", valor: 1200 }, 
-			{ categoria: "Conta de Luz", tipo: "despesa", valor: 200 }, 
-			{ categoria: "Conta de Água", tipo: "despesa", valor: 100 }, 
-			{ categoria: "Internet", tipo: "despesa", valor: 200 }, 
-			{ categoria: "Transporte", tipo: "despesa", valor: 500 }, 
-			{ categoria: "Lazer", tipo: "despesa", valor: 800 }, 
-			{ categoria: "Alimentação", tipo: "despesa", valor: 1000 }, 
-			{ categoria: "Condomínio", tipo: "despesa", valor: 400 }
+      new Lancamento("Salario", "receita", 4000),
+      new Lancamento("Aluguel", "despesa", 1200),
+      new Lancamento("Conta de Luz", "despesa", 200),
+      new Lancamento("Conta de Água", "despesa", 100),
+      new Lancamento("Internet", "despesa", 200),
+      new Lancamento("Transporte", "despesa", 500),
+      new Lancamento("Lazer", "despesa", 800),
+      new Lancamento("Alimentação", "despesa", 1000),
+      new Lancamento("Condomínio", "despesa", 400),
     ];
 
-    saldo3 = calcularSaldo("marco", saldo2, lancamentosMarco);
-    console.log(saldo3);
+    totalizadorDoMes3 = calcularSaldo("Marco", totalizadorDoMes2.saldo, lancamentosMarco);
+    console.log(totalizadorDoMes3);
 
-    acumuladoAno = saldo3;
-    console.log("Total ano");
+    acumuladoAno = totalizadorDoMes3.saldo;
+    console.log("Total Acumulado");
     console.log(acumuladoAno);
   </script>
 </html>
