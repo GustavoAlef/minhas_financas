@@ -15,6 +15,10 @@ class Mes {
     this.lancamentos = [];
   }
 
+  arredondar(valor) {
+    return Math.round(valor * 100) / 100;
+  }
+
   adicionarLancamento(lancamento) {
     this.lancamentos.push(lancamento);
   }
@@ -52,7 +56,7 @@ class Mes {
     const distribuicaoDeDespesas = [];
     for (const lancamento of this.lancamentos) {
       if (lancamento.tipo === "despesa") {
-        const percentual = arredondar(
+        const percentual = this.arredondar(
           (lancamento.valor / this.totalizadorDoMes.despesas) * 100
         );
         distribuicaoDeDespesas.push({
@@ -69,7 +73,7 @@ class Mes {
       this.totalizadorDoMes.juros = this.calcularJuros(
         this.totalizadorDoMes.saldo
       );
-      this.totalizadorDoMes.saldo = arredondar(
+      this.totalizadorDoMes.saldo = this.arredondar(
         this.totalizadorDoMes.saldo + this.totalizadorDoMes.juros
       );
     }
@@ -80,19 +84,19 @@ class Mes {
       this.totalizadorDoMes.rendimentos = this.calcularRendimentos(
         this.totalizadorDoMes.saldo
       );
-      this.totalizadorDoMes.saldo = arredondar(
+      this.totalizadorDoMes.saldo = this.arredondar(
         this.totalizadorDoMes.saldo + this.totalizadorDoMes.rendimentos
       );
     }
   }
 
   calcularJuros(valor) {
-    const juros = arredondar(valor * 0.1);
+    const juros = this.arredondar(valor * 0.1);
     return juros;
   }
 
   calcularRendimentos(valor) {
-    const rendimentos = arredondar(valor * 0.005);
+    const rendimentos = this.arredondar(valor * 0.005);
     return rendimentos;
   }
 }
