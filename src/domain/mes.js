@@ -13,7 +13,7 @@ class Mes {
       distribuicaoDeDespesas: [],
     };
     this.lancamentos = [];
-  }
+  } 
 
   arredondar(valor) {
     return Math.round(valor * 100) / 100;

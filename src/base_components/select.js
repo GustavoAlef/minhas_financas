@@ -9,5 +9,5 @@ class Select {
        const option = document.createElement('option');
        option.text = text;
        this.element.appendChild(option);
-    }
+    } 
   }

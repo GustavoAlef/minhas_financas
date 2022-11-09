@@ -7,5 +7,5 @@ class Button {
   
     addListener(fn) {
       this.element.addEventListener('click', fn)
-    }
+    } 
   }

@@ -13,5 +13,5 @@ class Tabela {
       }
   
       this.element.appendChild(tr)
-    }
+    } 
   }

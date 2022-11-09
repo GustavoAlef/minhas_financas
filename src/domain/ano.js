@@ -15,7 +15,7 @@ class Ano {
                 break;
             }
         }
-    }
+    } 
 
     calcularSaldo() {
         let saldoInicial = 0;

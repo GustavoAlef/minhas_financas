@@ -2,7 +2,7 @@ class Grafico {
     constructor() {
         this.element = document.createElement("div");
         this.element.className = "grafico";
-        this.cores = ["red", "green", "yellow", "blue"];
+        this.cores = ["red", "green", "yellow", "blue"]; 
     }
 
     adicionarColuna(valor, descricao) {

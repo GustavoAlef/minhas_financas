@@ -10,7 +10,7 @@ class Lancamento {
 
     if (categoria === "") {
       throw new Error("lançamento inválido: A Categoria é obrigatória");
-    }
+    } 
 
     this.categoria = categoria;
     this.tipo = tipo;

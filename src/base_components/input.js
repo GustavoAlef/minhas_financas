@@ -4,5 +4,5 @@ class Input {
       this.element.id = id;
       this.element.type = type;
       this.element.placeholder = placeholder;
-    }
+    } 
   }

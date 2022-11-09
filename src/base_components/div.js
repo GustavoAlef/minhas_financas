@@ -7,5 +7,5 @@ class Div {
   
     adicionarElementoFilho(child){
       this.element.appendChild(child);
-    }
+    } 
   }
