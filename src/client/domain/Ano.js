@@ -17,6 +17,11 @@ class Ano {
         }
     } 
 
+    deletarLancamento (mes, lancamento) {
+        const position = mes.lancamentos.indexOf(lancamento);
+        mes.lancamentos.splice(position, 1);
+    }
+
     calcularSaldo() {
         let saldoInicial = 0;
         for (const mes of this.meses) {

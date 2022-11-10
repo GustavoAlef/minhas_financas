@@ -1,0 +1,6 @@
+separar responsabilidades de conexao:
+1 - ponto de entrada da aplicaçao - ok
+2 - conexao com o banco de dados - ok
+3 - definição dos serviços da api - ok
+4 - interação com o bd - ok
+5 - config das rotas da api e abertura do servidor numa porta específica - ok
